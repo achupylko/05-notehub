@@ -10,7 +10,10 @@ interface NoteResponse {
   totalPages: number;
 }
 
-export const fetchNotes = async (search: string): Promise<NoteResponse> => {
+export const fetchNotes = async (
+  search: string,
+  page: number
+): Promise<NoteResponse> => {
   const response = await axios.get<NoteResponse>('/notes', {
     method: 'GET',
     headers: {
@@ -19,6 +22,7 @@ export const fetchNotes = async (search: string): Promise<NoteResponse> => {
     },
     params: {
       search,
+      page,
       perPage: 12,
     },
   });
