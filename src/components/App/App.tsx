@@ -9,13 +9,14 @@ import NoteForm from '../NoteForm/NoteForm';
 import SearchBox from '../SearchBox/SearchBox';
 import { useDebouncedCallback } from 'use-debounce';
 import Loader from '../Loader/Loader';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data, isLoading, isSuccess } = useQuery({
+  const { data, isLoading, isError, error, isSuccess } = useQuery({
     queryKey: ['notes', searchQuery, currentPage],
     queryFn: () => fetchNotes(searchQuery, currentPage),
     placeholderData: keepPreviousData,
@@ -61,6 +62,8 @@ function App() {
       </header>
 
       {isLoading && <Loader />}
+
+      {isError && <ErrorMessage message={(error as Error).message} />}
 
       {isSuccess && <NoteList items={data.notes} />}
     </div>
