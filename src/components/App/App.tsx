@@ -3,9 +3,11 @@ import NoteList from '../NoteList/NoteList';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { fetchNotes } from '../../services/noteService';
 import Pagination from '../Pagination/Pagination';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Modal from '../Modal/Modal';
 import NoteForm from '../NoteForm/NoteForm';
+import SearchBox from '../SearchBox/SearchBox';
+import { useDebouncedCallback } from 'use-debounce';
 
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -20,13 +22,26 @@ function App() {
 
   const totalPages = data?.totalPages ?? 0;
 
+  const updateSearchQuery = useDebouncedCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchQuery(event.target.value);
+      setCurrentPage(1);
+    },
+    300
+  );
+
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
-        {/* Компонент SearchBox */}
+        {
+          <SearchBox
+            inputValue={searchQuery}
+            handleChange={updateSearchQuery}
+          />
+        }
         {isSuccess && totalPages > 1 && (
           <Pagination
             totalPages={totalPages}
