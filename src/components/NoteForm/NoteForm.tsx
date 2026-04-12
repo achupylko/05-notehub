@@ -1,4 +1,4 @@
-import { Formik, Form, Field, type FormikHelpers, ErrorMessage } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useId } from 'react';
 
 import * as Yup from 'yup';
@@ -46,15 +46,8 @@ export default function NoteForm({ onClose }: NoteFormProps) {
     },
   });
 
-  const handlerSubmit = (
-    values: FormValues,
-    formilHelpers: FormikHelpers<FormValues>
-  ) => {
-    mutation.mutate(values, {
-      onSuccess: () => {
-        formilHelpers.resetForm();
-      },
-    });
+  const handlerSubmit = (values: FormValues) => {
+    mutation.mutate(values);
   };
 
   return (
