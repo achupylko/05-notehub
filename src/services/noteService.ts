@@ -44,3 +44,12 @@ export const createNote = async (newNote: NewNote) => {
   });
   return response.data;
 };
+
+export const deleteNote = async (noteId: string) => {
+  const response = await axios.delete<Note>(`/notes/${noteId}`, {
+    headers: {
+      Authorization: `Bearer ${TOKEN}`,
+    },
+  });
+  return response.data;
+};
