@@ -8,13 +8,14 @@ import Modal from '../Modal/Modal';
 import NoteForm from '../NoteForm/NoteForm';
 import SearchBox from '../SearchBox/SearchBox';
 import { useDebouncedCallback } from 'use-debounce';
+import Loader from '../Loader/Loader';
 
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data, isSuccess } = useQuery({
+  const { data, isLoading, isSuccess } = useQuery({
     queryKey: ['notes', searchQuery, currentPage],
     queryFn: () => fetchNotes(searchQuery, currentPage),
     placeholderData: keepPreviousData,
@@ -58,7 +59,10 @@ function App() {
           </Modal>
         )}
       </header>
-      {data && <NoteList items={data.notes} />}
+
+      {isLoading && <Loader />}
+
+      {isSuccess && <NoteList items={data.notes} />}
     </div>
   );
 }
